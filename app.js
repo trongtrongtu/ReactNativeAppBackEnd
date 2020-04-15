@@ -33,7 +33,7 @@ var app = express();
 
  Step 4:
  Connect mongdDB:
- mongo --port 27017 -u "hoangnd" -p "hoangnd" --authenticationDatabase "tutorialMongoDB"
+ mongo --port 27017 -u "admin" -p "admin" --authenticationDatabase "MongoDB"
 
  */
 var mongoose = require('mongoose');

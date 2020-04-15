@@ -1,16 +1,13 @@
-/**
- * Created by hoangnd on 8/7/17.
- */
 'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var FoodSchema = new Schema({
+var ProductSchema = new Schema({
     name: {
         type: String,
         required: true
     },
-    foodDescription: {
+    productDescription: {
         type: String,
         default: ""
     },
@@ -24,10 +21,10 @@ var FoodSchema = new Schema({
             enum: ['available', 'unavailable']
         }],
         default: ['available']
-    }
+    },
+    categoryId: Schema.ObjectId
 });
-// a setter
-FoodSchema.path('name').set( (inputString) => {
+ProductSchema.path('name').set( (inputString) => {
     return inputString[0].toUpperCase() + inputString.slice(1);
 });
-module.exports = mongoose.model('Food', FoodSchema);
+module.exports = mongoose.model('Product', ProductSchema);
