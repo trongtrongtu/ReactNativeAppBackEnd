@@ -22,7 +22,10 @@ var ProductSchema = new Schema({
         }],
         default: ['available']
     },
-    categoryId: Schema.ObjectId
+    categoryId: Schema.ObjectId,
+    imageUrl: {
+        type: String
+    }
 });
 ProductSchema.path('name').set( (inputString) => {
     return inputString[0].toUpperCase() + inputString.slice(1);
