@@ -81,11 +81,13 @@ router.get('/list_products_with_criteria', (request, response, next) => {
 });
 router.post('/insert_new_product', (request, response, next) => {
     console.log(`request.body.name = ${request.body.name}`);
+    let newValues = {};
     const serverPort = require("../app").settings.port;
+    newValues.imageUrl = `192.168.1.138:${serverPort}/open_image?image_name=${request.body.image_name}`
     const newProduct = new Product({
         name: request.body.name,
         productDescription: request.body.productDescription,
-        imageUrl = `192.168.1.138:${serverPort}/open_image?image_name=${request.body.image_name}`
+        imageUrl: newValues.imageUrl
     });
     newProduct.save((err) => {
         debugger;
@@ -101,6 +103,7 @@ router.post('/insert_new_product', (request, response, next) => {
                 data: {
                     name: request.body.name,
                     productDescription: request.body.productDescription,
+                    imageUrl: newValues.imageUrl,
                     messege: "Insert new product successfully"
                 }
             });
