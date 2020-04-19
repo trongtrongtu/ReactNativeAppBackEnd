@@ -220,6 +220,18 @@ router.get('/open_image', (request, response, next) => {
 });
 
 router.delete('/delete_a_product', (request, response, next) => {
-    response.end("DELETE requested => delete_a_product");
+    Product.findOneAndRemove({ _id: mongoose.Types.ObjectId(request.body.product_id) }, (err) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                messege: `Cannot delete product. Error is : ${err}`
+            });
+            return;
+        }
+        response.json({
+            result: "ok",
+            messege: "Delete product with product_id successful"
+        });
+    });
 });
 module.exports = router;
