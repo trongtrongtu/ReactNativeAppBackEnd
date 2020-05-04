@@ -15,6 +15,9 @@ var ProductSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    quantity : {
+        type: String
+    },
     status: {
         type: [{
             type: String,

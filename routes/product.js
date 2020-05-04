@@ -8,6 +8,7 @@ router.get('/list_all_products', (request, response, next) => {
         name: 1,
         productDescription: 1,
         created_date: 1,
+        quantity : 1,
         status: 1,
         imageUrl: 1,
     }).exec((err, products) => {
@@ -60,6 +61,7 @@ router.get('/list_products_with_criteria', (request, response, next) => {
     Product.find(criteria).limit(limit).sort({ name: 1 }).select({
         name: 1,
         productDescription: 1,
+        quantity : 1,
         created_date: 1,
         status: 1
     }).exec((err, products) => {
@@ -87,7 +89,8 @@ router.post('/insert_new_product', (request, response, next) => {
     const newProduct = new Product({
         name: request.body.name,
         productDescription: request.body.productDescription,
-        imageUrl: newValues.imageUrl
+        imageUrl: newValues.imageUrl,
+        quantity : 1,
     });
     newProduct.save((err) => {
         debugger;
@@ -104,6 +107,7 @@ router.post('/insert_new_product', (request, response, next) => {
                     name: request.body.name,
                     productDescription: request.body.productDescription,
                     imageUrl: newValues.imageUrl,
+                    quantity : 1,
                     messege: "Insert new product successfully"
                 }
             });
