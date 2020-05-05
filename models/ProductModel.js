@@ -18,6 +18,9 @@ var ProductSchema = new Schema({
     quantity : {
         type: String
     },
+    checked : {
+        type: String
+    },
     status: {
         type: [{
             type: String,

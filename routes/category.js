@@ -3,6 +3,29 @@ let Category = require('../models/CategoryModel');
 let Product = require('../models/ProductModel');
 var mongoose = require('mongoose');
 
+router.get('/list_all_categories', (request, response, next) => {
+    Category.find({}).limit(100).sort({ name: 1 }).select({
+        _id: 1,
+        name: 1,
+        description: 1,
+    }).exec((err, categories) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: [],
+                messege: `Error is : ${err}`
+            });
+        } else {
+            response.json({
+                result: "ok",
+                data: categories,
+                count: categories.length,
+                messege: "Query list of categories successfully"
+            });
+        }
+    });
+});
+
 router.post('/insert_new_category', (request, response, next) => {
     const criteria = {
         name: new RegExp('^' + request.body.name.trim() + '$', "i")

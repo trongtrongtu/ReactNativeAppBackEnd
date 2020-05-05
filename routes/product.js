@@ -5,10 +5,12 @@ let fs = require('fs');
 
 router.get('/list_all_products', (request, response, next) => {
     Product.find({}).limit(100).sort({ name: 1 }).select({
+        _id: 1,
         name: 1,
         productDescription: 1,
         created_date: 1,
         quantity : 1,
+        checked : 1,
         status: 1,
         imageUrl: 1,
     }).exec((err, products) => {
@@ -62,6 +64,7 @@ router.get('/list_products_with_criteria', (request, response, next) => {
         name: 1,
         productDescription: 1,
         quantity : 1,
+        checked : 1,
         created_date: 1,
         status: 1
     }).exec((err, products) => {
@@ -91,6 +94,7 @@ router.post('/insert_new_product', (request, response, next) => {
         productDescription: request.body.productDescription,
         imageUrl: newValues.imageUrl,
         quantity : 1,
+        checked : 1
     });
     newProduct.save((err) => {
         debugger;
@@ -108,6 +112,7 @@ router.post('/insert_new_product', (request, response, next) => {
                     productDescription: request.body.productDescription,
                     imageUrl: newValues.imageUrl,
                     quantity : 1,
+                    checked : 1,
                     messege: "Insert new product successfully"
                 }
             });
