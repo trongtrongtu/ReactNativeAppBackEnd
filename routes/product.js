@@ -11,6 +11,7 @@ router.get('/list_all_products', (request, response, next) => {
         created_date: 1,
         quantity : 1,
         checked : 1,
+        category_name: 1,
         status: 1,
         imageUrl: 1,
     }).exec((err, products) => {
@@ -48,23 +49,23 @@ router.get('/get_product_with_id', (request, response, next) => {
             }
         });
 });
-router.get('/list_products_with_criteria', (request, response, next) => {
-    if (!request.query.name) {
+router.get('/list_products_with_category', (request, response, next) => {
+    if (!request.query.category_name) {
         response.json({
             result: "failed",
             data: [],
             messege: "Input parameters is wrong!. 'name' must be not NULL"
         });
     }
-    let criteria = {
-        name: new RegExp('^' + request.query.name + '$', "i"),
+    let category = {
+        category_name: new RegExp('^' + request.query.category_name + '$', "i"),
     };
-    const limit = parseInt(request.query.limit) > 0 ? parseInt(request.query.limit) : 100;
-    Product.find(criteria).limit(limit).sort({ name: 1 }).select({
+    Product.find(category).limit(100).sort({ name: 1 }).select({
         name: 1,
         productDescription: 1,
         quantity : 1,
         checked : 1,
+        category_name: 1,
         created_date: 1,
         status: 1
     }).exec((err, products) => {
@@ -93,6 +94,7 @@ router.post('/insert_new_product', (request, response, next) => {
         name: request.body.name,
         productDescription: request.body.productDescription,
         imageUrl: newValues.imageUrl,
+        category_name: 1,
         quantity : 1,
         checked : 1
     });
@@ -111,6 +113,7 @@ router.post('/insert_new_product', (request, response, next) => {
                     name: request.body.name,
                     productDescription: request.body.productDescription,
                     imageUrl: newValues.imageUrl,
+                    category_name: 1,
                     quantity : 1,
                     checked : 1,
                     messege: "Insert new product successfully"
