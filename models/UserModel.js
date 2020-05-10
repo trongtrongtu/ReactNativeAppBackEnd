@@ -28,7 +28,5 @@ var UserSchema = new Schema({
         type: Number,
     },
 });
-UserSchema.path('username').set((inputString) => {
-    return inputString[0].toUpperCase() + inputString.slice(1);
-});
+
 module.exports = mongoose.model('User', UserSchema);

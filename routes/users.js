@@ -64,4 +64,42 @@ router.get('/my_account', (request, response) => {
     }
   });
 });
+
+router.post('/register', (request, response) => {
+  const newUser = new User({
+    username: request.body.username,
+    password: request.body.password,
+    ngay_sinh: request.body.ngay_sinh,
+    gioi_tinh: request.body.gioi_tinh,
+    email: request.body.email,
+    sdt: request.body.sdt,
+    dia_chi: request.body.dia_chi,
+    ro_le: 1
+  });
+  newUser.save((err) => {
+    debugger;
+    if (err) {
+      response.json({
+        result: "failed",
+        data: {},
+        messege: `Error is : ${err}`
+      });
+    } else {
+      response.json({
+        result: "ok",
+        data: {
+          username: request.body.username,
+          ngay_sinh: request.body.ngay_sinh,
+          gioi_tinh: request.body.gioi_tinh,
+          email: request.body.email,
+          sdt: request.body.sdt,
+          dia_chi: request.body.dia_chi,
+          ro_le: 1,
+          messege: "Insert new user successfully"
+        }
+      });
+    }
+  });
+});
+
 module.exports = router;
