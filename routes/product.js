@@ -1,5 +1,6 @@
 var router = global.router;
 let Product = require('../models/ProductModel');
+let User = require('../models/UserModel');
 var mongoose = require('mongoose');
 let fs = require('fs');
 
@@ -31,7 +32,7 @@ router.get('/list_all_products', (request, response, next) => {
         }
     });
 });
-router.get('/get_product_with_id', (request, response, next) => {
+router.get('/get_product_with_id', (request, response) => {
     Product.findById(require('mongoose').Types.ObjectId(request.query.product_id),
         (err, product) => {
             if (err) {
@@ -49,7 +50,7 @@ router.get('/get_product_with_id', (request, response, next) => {
             }
         });
 });
-router.get('/list_products_with_category', (request, response, next) => {
+router.get('/list_products_with_category', (request, response) => {
     if (!request.query.category_name) {
         response.json({
             result: "failed",
@@ -60,14 +61,15 @@ router.get('/list_products_with_category', (request, response, next) => {
     let category = {
         category_name: new RegExp('^' + request.query.category_name + '$', "i"),
     };
-    Product.find(category).limit(100).sort({ name: 1 }).select({
+    Product.find(category).limit(100).sort().select({
         name: 1,
         productDescription: 1,
         quantity : 1,
         checked : 1,
         category_name: 1,
         created_date: 1,
-        status: 1
+        status: 1,
+        imageUrl: 1
     }).exec((err, products) => {
         if (err) {
             response.json({
@@ -81,6 +83,41 @@ router.get('/list_products_with_category', (request, response, next) => {
                 data: products,
                 count: products.length,
                 messege: "Query list of products successfully"
+            });
+        }
+    });
+});
+router.get('/login', (request, response) => {
+    if (!request.query.username || !request.query.password) {
+        response.json({
+            result: "failed",
+            data: [],
+            messege: "Input parameters is wrong!. 'username' and 'password' must be not NULL"
+        });
+    }
+    let login = {
+        username: new RegExp('^' + request.query.username + '$', "i"),
+        password: new RegExp('^' + request.query.password + '$', "i")
+    };
+    User.find(login).limit(100).sort().select({
+        username: 1,
+        password: 1,
+    }).exec((err, users) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: [],
+                messege: `Error is : ${err}`
+            });
+        } else if(users.length == 0){
+            response.json({
+                result: "failed",
+                messege: "Query check of login failed"
+            });
+        } else {
+            response.json({
+                result: "ok",
+                messege: "Query check of login successfully"
             });
         }
     });
