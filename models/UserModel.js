@@ -9,6 +9,24 @@ var UserSchema = new Schema({
     password: {
         type: String,
     },
+    ngay_sinh: {
+        type: Date,
+    },
+    gioi_tinh: {
+        type: String,
+    },
+    email: {
+        type: String,
+    },
+    sdt: {
+        type: Number,
+    },
+    dia_chi: {
+        type: String,
+    },
+    ro_le: {
+        type: Number,
+    },
 });
 UserSchema.path('username').set((inputString) => {
     return inputString[0].toUpperCase() + inputString.slice(1);

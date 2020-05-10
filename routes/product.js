@@ -1,6 +1,5 @@
 var router = global.router;
 let Product = require('../models/ProductModel');
-let User = require('../models/UserModel');
 var mongoose = require('mongoose');
 let fs = require('fs');
 
@@ -10,8 +9,8 @@ router.get('/list_all_products', (request, response, next) => {
         name: 1,
         productDescription: 1,
         created_date: 1,
-        quantity : 1,
-        checked : 1,
+        quantity: 1,
+        checked: 1,
         category_name: 1,
         status: 1,
         imageUrl: 1,
@@ -64,8 +63,8 @@ router.get('/list_products_with_category', (request, response) => {
     Product.find(category).limit(100).sort().select({
         name: 1,
         productDescription: 1,
-        quantity : 1,
-        checked : 1,
+        quantity: 1,
+        checked: 1,
         category_name: 1,
         created_date: 1,
         status: 1,
@@ -87,41 +86,7 @@ router.get('/list_products_with_category', (request, response) => {
         }
     });
 });
-router.get('/login', (request, response) => {
-    if (!request.query.username || !request.query.password) {
-        response.json({
-            result: "failed",
-            data: [],
-            messege: "Input parameters is wrong!. 'username' and 'password' must be not NULL"
-        });
-    }
-    let login = {
-        username: new RegExp('^' + request.query.username + '$', "i"),
-        password: new RegExp('^' + request.query.password + '$', "i")
-    };
-    User.find(login).limit(100).sort().select({
-        username: 1,
-        password: 1,
-    }).exec((err, users) => {
-        if (err) {
-            response.json({
-                result: "failed",
-                data: [],
-                messege: `Error is : ${err}`
-            });
-        } else if(users.length == 0){
-            response.json({
-                result: "failed",
-                messege: "Query check of login failed"
-            });
-        } else {
-            response.json({
-                result: "ok",
-                messege: "Query check of login successfully"
-            });
-        }
-    });
-});
+
 router.post('/insert_new_product', (request, response, next) => {
     console.log(`request.body.name = ${request.body.name}`);
     let newValues = {};
@@ -132,8 +97,8 @@ router.post('/insert_new_product', (request, response, next) => {
         productDescription: request.body.productDescription,
         imageUrl: newValues.imageUrl,
         category_name: 1,
-        quantity : 1,
-        checked : 1
+        quantity: 1,
+        checked: 1
     });
     newProduct.save((err) => {
         debugger;
@@ -151,8 +116,8 @@ router.post('/insert_new_product', (request, response, next) => {
                     productDescription: request.body.productDescription,
                     imageUrl: newValues.imageUrl,
                     category_name: 1,
-                    quantity : 1,
-                    checked : 1,
+                    quantity: 1,
+                    checked: 1,
                     messege: "Insert new product successfully"
                 }
             });
