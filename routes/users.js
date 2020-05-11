@@ -3,13 +3,6 @@ let User = require('../models/UserModel');
 var mongoose = require('mongoose');
 
 router.get('/login', (request, response) => {
-  if (!request.query.username || !request.query.password) {
-    response.json({
-      result: "failed",
-      data: [],
-      messege: "Input parameters is wrong!. 'username' and 'password' must be not NULL"
-    });
-  }
   let login = {
     username: request.query.username,
     password: request.query.password
