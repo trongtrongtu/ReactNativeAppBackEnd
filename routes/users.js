@@ -11,8 +11,8 @@ router.get('/login', (request, response) => {
     });
   }
   let login = {
-    username: new RegExp('^' + request.query.username + '$', "i"),
-    password: new RegExp('^' + request.query.password + '$', "i")
+    username: request.query.username,
+    password: request.query.password
   };
   User.find(login).limit(100).sort().select({
     username: 1,
@@ -39,7 +39,8 @@ router.get('/login', (request, response) => {
 });
 
 router.get('/my_account', (request, response) => {
-  User.find({}).limit(100).sort({ name: 1 }).select({
+  let username = request.query.username
+  User.find({ username }).limit(100).sort({ name: 1 }).select({
     _id: 1,
     username: 1,
     ngay_sinh: 1,
@@ -59,47 +60,62 @@ router.get('/my_account', (request, response) => {
       response.json({
         result: "ok",
         data: users,
-        messege: "Query list of products successfully"
+        messege: "Query myaccount successfully"
       });
     }
   });
 });
 
 router.post('/register', (request, response) => {
-  const newUser = new User({
-    username: request.body.username,
-    password: request.body.password,
-    ngay_sinh: request.body.ngay_sinh,
-    gioi_tinh: request.body.gioi_tinh,
-    email: request.body.email,
-    sdt: request.body.sdt,
-    dia_chi: request.body.dia_chi,
-    ro_le: 1
-  });
-  newUser.save((err) => {
-    debugger;
-    if (err) {
+  let username = request.body.username;
+  User.find({ username }).limit(100).sort({ name: 1 }).select({
+    username: 1
+  }).exec((err, users) => {
+    if (users.length == 1) {
+      count = 1;
       response.json({
         result: "failed",
-        data: {},
-        messege: `Error is : ${err}`
+        data: users,
+        messege: "username already exists"
       });
     } else {
-      response.json({
-        result: "ok",
-        data: {
+        const newUser = new User({
           username: request.body.username,
+          password: request.body.password,
           ngay_sinh: request.body.ngay_sinh,
           gioi_tinh: request.body.gioi_tinh,
           email: request.body.email,
           sdt: request.body.sdt,
           dia_chi: request.body.dia_chi,
-          ro_le: 1,
-          messege: "Insert new user successfully"
-        }
-      });
+          ro_le: 1
+        });
+        newUser.save((err) => {
+          debugger;
+          if (err) {
+            response.json({
+              result: "failed",
+              data: {},
+              messege: `Error is : ${err}`
+            });
+          } else {
+            response.json({
+              result: "ok",
+              data: {
+                username: request.body.username,
+                ngay_sinh: request.body.ngay_sinh,
+                gioi_tinh: request.body.gioi_tinh,
+                email: request.body.email,
+                sdt: request.body.sdt,
+                dia_chi: request.body.dia_chi,
+                ro_le: 1,
+                messege: "Insert new user successfully"
+              }
+            });
+          }
+        });
     }
   });
+  
 });
 
 module.exports = router;
