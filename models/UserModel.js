@@ -19,7 +19,7 @@ var UserSchema = new Schema({
         type: String,
     },
     sdt: {
-        type: Number,
+        type: String,
     },
     dia_chi: {
         type: String,
