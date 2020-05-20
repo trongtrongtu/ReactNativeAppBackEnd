@@ -50,13 +50,6 @@ router.get('/get_product_with_id', (request, response) => {
         });
 });
 router.get('/list_products_with_category', (request, response) => {
-    if (!request.query.category_name) {
-        response.json({
-            result: "failed",
-            data: [],
-            messege: "Input parameters is wrong!. 'name' must be not NULL"
-        });
-    }
     let category = {
         category_name: new RegExp('^' + request.query.category_name + '$', "i"),
     };
@@ -82,6 +75,37 @@ router.get('/list_products_with_category', (request, response) => {
                 data: products,
                 count: products.length,
                 messege: "Query list of products successfully"
+            });
+        }
+    });
+});
+
+router.get('/list_product_with_productname', (request, response) => {
+    let product_name = {
+        name: request.query.name
+    };
+    Product.find(product_name).limit(100).sort().select({
+        name: 1,
+        productDescription: 1,
+        quantity: 1,
+        checked: 1,
+        category_name: 1,
+        created_date: 1,
+        status: 1,
+        imageUrl: 1
+    }).exec((err, products) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: [],
+                messege: `Error is : ${err}`
+            });
+        } else {
+            response.json({
+                result: "ok",
+                data: products,
+                count: products.length,
+                messege: "Query product successfully"
             });
         }
     });

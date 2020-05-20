@@ -72,43 +72,72 @@ router.post('/register', (request, response) => {
         messege: "username already exists"
       });
     } else {
-        const newUser = new User({
-          username: request.body.username,
-          password: request.body.password,
-          ngay_sinh: request.body.ngay_sinh,
-          gioi_tinh: request.body.gioi_tinh,
-          email: request.body.email,
-          sdt: request.body.sdt,
-          dia_chi: request.body.dia_chi,
-          ro_le: 1
-        });
-        newUser.save((err) => {
-          debugger;
-          if (err) {
-            response.json({
-              result: "failed",
-              data: {},
-              messege: `Error is : ${err}`
-            });
-          } else {
-            response.json({
-              result: "ok",
-              data: {
-                username: request.body.username,
-                ngay_sinh: request.body.ngay_sinh,
-                gioi_tinh: request.body.gioi_tinh,
-                email: request.body.email,
-                sdt: request.body.sdt,
-                dia_chi: request.body.dia_chi,
-                ro_le: 1,
-                messege: "Insert new user successfully"
-              }
-            });
-          }
-        });
+      const newUser = new User({
+        username: request.body.username,
+        password: request.body.password,
+        ngay_sinh: request.body.ngay_sinh,
+        gioi_tinh: request.body.gioi_tinh,
+        email: request.body.email,
+        sdt: request.body.sdt,
+        dia_chi: request.body.dia_chi,
+        ro_le: 1
+      });
+      newUser.save((err) => {
+        debugger;
+        if (err) {
+          response.json({
+            result: "failed",
+            data: {},
+            messege: `Error is : ${err}`
+          });
+        } else {
+          response.json({
+            result: "ok",
+            data: {
+              username: request.body.username,
+              ngay_sinh: request.body.ngay_sinh,
+              gioi_tinh: request.body.gioi_tinh,
+              email: request.body.email,
+              sdt: request.body.sdt,
+              dia_chi: request.body.dia_chi,
+              ro_le: 1,
+              messege: "Insert new user successfully"
+            }
+          });
+        }
+      });
     }
   });
-  
+
+});
+router.put('/update_user', (request, response, next) => {
+  let newValues = {
+    username: request.body.username,
+    ngay_sinh: request.body.ngay_sinh,
+    gioi_tinh: request.body.gioi_tinh,
+    email: request.body.email,
+    sdt: request.body.sdt,
+    dia_chi: request.body.dia_chi,
+  };
+  const options = {
+    new: true,
+    multi: true
+  }
+  User.findOneAndUpdate(request.body.username, { $set: newValues }, options, (err, updatedUser) => {
+    if (err) {
+      response.json({
+        result: "failed",
+        data: {},
+        messege: `Cannot update existing product.Error is : ${err}`
+      });
+    } else {
+      response.json({
+        result: "ok",
+        data: updatedUser,
+        messege: "Update user successfully"
+      });
+    }
+  });
 });
 
 module.exports = router;
