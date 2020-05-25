@@ -111,33 +111,40 @@ router.post('/register', (request, response) => {
 
 });
 router.put('/update_user', (request, response, next) => {
-  let newValues = {
-    username: request.body.username,
-    ngay_sinh: request.body.ngay_sinh,
-    gioi_tinh: request.body.gioi_tinh,
-    email: request.body.email,
-    sdt: request.body.sdt,
-    dia_chi: request.body.dia_chi,
-  };
-  const options = {
-    new: true,
-    multi: true
-  }
-  User.findOneAndUpdate(request.body.username, { $set: newValues }, options, (err, updatedUser) => {
-    if (err) {
-      response.json({
-        result: "failed",
-        data: {},
-        messege: `Cannot update existing product.Error is : ${err}`
-      });
-    } else {
-      response.json({
-        result: "ok",
-        data: updatedUser,
-        messege: "Update user successfully"
-      });
+  var username = request.body.username;
+  var conditions = {};
+  User.find({ username }).limit(100).sort({ name: 1 }).select({
+    _id: 1
+  }).exec((err, users) => {
+    conditions._id = users[0]._id;
+    let newValues = {
+      username: request.body.username,
+      ngay_sinh: request.body.ngay_sinh,
+      gioi_tinh: request.body.gioi_tinh,
+      email: request.body.email,
+      sdt: request.body.sdt,
+      dia_chi: request.body.dia_chi,
+    };
+    const options = {
+      new: true,
+      multi: true
     }
-  });
+    User.findOneAndUpdate(conditions, { $set: newValues }, options, (err, updatedUser) => {
+      if (err) {
+        response.json({
+          result: "failed",
+          data: {},
+          messege: `Cannot update existing product.Error is : ${err}`
+        });
+      } else {
+        response.json({
+          result: "ok",
+          data: updatedUser,
+          messege: "Update user successfully"
+        });
+      }
+    });
+  })
 });
 
 module.exports = router;
