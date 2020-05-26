@@ -2,6 +2,7 @@ var router = global.router;
 let Product = require('../models/ProductModel');
 var mongoose = require('mongoose');
 let fs = require('fs');
+const IpAddress = '192.168.1.3';
 
 router.get('/list_all_products', (request, response, next) => {
     Product.find({}).limit(100).sort({ name: 1 }).select({
@@ -115,7 +116,7 @@ router.post('/insert_new_product', (request, response, next) => {
     console.log(`request.body.name = ${request.body.name}`);
     let newValues = {};
     const serverPort = require("../app").settings.port;
-    newValues.imageUrl = `192.168.1.138:${serverPort}/open_image?image_name=${request.body.image_name}`
+    newValues.imageUrl = `${IpAddress}:${serverPort}/open_image?image_name=${request.body.image_name}`
     const newProduct = new Product({
         name: request.body.name,
         productDescription: request.body.productDescription,
@@ -170,7 +171,7 @@ router.put('/update_a_product', (request, response, next) => {
     if (request.body.image_name && request.body.image_name.length > 0) {
         //http://192.168.1.138:3001/open_image?image_name=upload_e2312e497df8c230b4896fa3b43bb543.jpg
         const serverPort = require("../app").settings.port;
-        newValues.imageUrl = `192.168.1.138:${serverPort}/open_image?image_name=${request.body.image_name}`
+        newValues.imageUrl = `${IpAddress}:${serverPort}/open_image?image_name=${request.body.image_name}`
     }
     const options = {
         new: true,
