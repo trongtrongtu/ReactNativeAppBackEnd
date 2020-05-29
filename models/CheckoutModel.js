@@ -15,6 +15,9 @@ var CheckoutSchema = new Schema({
     dia_chi_order: {
         type: String,
     },
+    quantity : {
+        type: String
+    },
     name_product: {
         type: String,
         required: true

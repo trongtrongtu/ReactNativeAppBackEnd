@@ -9,6 +9,7 @@ router.post('/checkout_product', (request, response) => {
         sdt_order: request.body.sdt_order,
         dia_chi_order: request.body.dia_chi_order,
         price_product: request.body.price_product,
+        quantity: request.body.quantity
     });
     newCheckout.save((err) => {
         debugger;
@@ -28,6 +29,7 @@ router.post('/checkout_product', (request, response) => {
                     sdt_order: request.body.sdt_order,
                     dia_chi_order: request.body.dia_chi_order,
                     price_product: request.body.price_product,
+                    quantity: request.body.quantity,
                     messege: "Insert new checkout successfully"
                 }
             });
