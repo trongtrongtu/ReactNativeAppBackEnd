@@ -146,5 +146,44 @@ router.put('/update_user', (request, response, next) => {
     });
   })
 });
+router.put('/update_password', (request, response, next) => {
+  var username = request.body.username;
+  var conditions = {};
+  User.find({ username }).limit(100).sort({ name: 1 }).select({
+    _id: 1
+  }).exec((err, users) => {
+    conditions._id = users[0]._id;
+    let newValues = {
+      password: request.body.new_password
+    };
+    const options = {
+      new: true,
+      multi: true
+    }
+    if (users[0].password == request.body.old_password) {
+      User.findOneAndUpdate(conditions, { $set: newValues }, options, (err, updatedUser) => {
+        if (err) {
+          response.json({
+            result: "failed",
+            data: {},
+            messege: `Cannot update existing product.Error is : ${err}`
+          });
+        } else {
+          response.json({
+            result: "ok",
+            data: updatedUser,
+            messege: "Update user successfully"
+          });
+        }
+      });
+    } else {
+      response.json({
+        result: "failed",
+        data: {},
+        messege: 'Cannot update password'
+      });
+    }
+  })
+});
 
 module.exports = router;
