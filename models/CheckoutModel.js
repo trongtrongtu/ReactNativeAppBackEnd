@@ -15,7 +15,7 @@ var CheckoutSchema = new Schema({
     dia_chi_order: {
         type: String,
     },
-    quantity : {
+    quantity: {
         type: String
     },
     name_product: {
@@ -30,6 +30,9 @@ var CheckoutSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    trang_thai: {
+        type: String,
+    }
 });
 
 module.exports = mongoose.model('Checkout', CheckoutSchema);
