@@ -25,7 +25,7 @@ var UserSchema = new Schema({
         type: String,
     },
     ro_le: {
-        type: Number,
+        type: String,
     },
 });
 

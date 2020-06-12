@@ -10,6 +10,7 @@ router.get('/login', (request, response) => {
   User.find(login).limit(100).sort().select({
     username: 1,
     password: 1,
+    ro_le: 1
   }).exec((err, users) => {
     if (err) {
       response.json({
@@ -20,11 +21,13 @@ router.get('/login', (request, response) => {
     } else if (users.length == 0) {
       response.json({
         result: "failed",
+        data: [],
         messege: "Query check of login failed"
       });
     } else {
       response.json({
         result: "ok",
+        data: users,
         messege: "Query check of login successfully"
       });
     }
@@ -68,7 +71,7 @@ router.post('/register', (request, response) => {
       count = 1;
       response.json({
         result: "failed",
-        data: users,
+        data: [],
         messege: "username already exists"
       });
     } else {
@@ -80,14 +83,14 @@ router.post('/register', (request, response) => {
         email: request.body.email,
         sdt: request.body.sdt,
         dia_chi: request.body.dia_chi,
-        ro_le: 1
+        ro_le: 'user'
       });
       newUser.save((err) => {
         debugger;
         if (err) {
           response.json({
             result: "failed",
-            data: {},
+            data: [],
             messege: `Error is : ${err}`
           });
         } else {
@@ -100,7 +103,7 @@ router.post('/register', (request, response) => {
               email: request.body.email,
               sdt: request.body.sdt,
               dia_chi: request.body.dia_chi,
-              ro_le: 1,
+              ro_le: 'user',
               messege: "Insert new user successfully"
             }
           });
@@ -150,7 +153,8 @@ router.put('/update_password', (request, response, next) => {
   var username = request.body.username;
   var conditions = {};
   User.find({ username }).limit(100).sort({ name: 1 }).select({
-    _id: 1
+    _id: 1,
+    password: 1
   }).exec((err, users) => {
     conditions._id = users[0]._id;
     let newValues = {
