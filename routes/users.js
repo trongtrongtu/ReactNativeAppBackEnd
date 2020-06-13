@@ -2,6 +2,28 @@ var router = global.router;
 let User = require('../models/UserModel');
 var mongoose = require('mongoose');
 
+router.get('/list_all_users', (request, response, next) => {
+  let ro_le = "user";
+  User.find({ ro_le }).limit(100).sort({ name: 1 }).select({
+    username: 1,
+  }).exec((err, users) => {
+    if (err) {
+      response.json({
+        result: "failed",
+        data: [],
+        messege: `Error is : ${err}`
+      });
+    } else {
+      response.json({
+        result: "ok",
+        data: users,
+        count: users.length,
+        messege: "Query list of products successfully"
+      });
+    }
+  });
+});
+
 router.get('/login', (request, response) => {
   let login = {
     username: request.query.username,

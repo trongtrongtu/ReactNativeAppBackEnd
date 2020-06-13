@@ -32,6 +32,9 @@ var CheckoutSchema = new Schema({
     },
     trang_thai: {
         type: String,
+    },
+    imageUrl: {
+        type: String,
     }
 });
 
