@@ -6,6 +6,8 @@ router.get('/list_all_users', (request, response, next) => {
   let ro_le = "user";
   User.find({ ro_le }).limit(100).sort({ name: 1 }).select({
     username: 1,
+    sdt: 1,
+    dia_chi: 1
   }).exec((err, users) => {
     if (err) {
       response.json({

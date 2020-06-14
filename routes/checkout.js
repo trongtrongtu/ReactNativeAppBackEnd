@@ -75,4 +75,31 @@ router.get('/list_history_order', (request, response) => {
         }
     });
 });
+router.get('/list_order_users', (request, response) => {
+    Checkout.find({}).limit(100).sort({ name: 1 }).select({
+        name_product: 1,
+        username: 1,
+        username_order: 1,
+        sdt_order: 1,
+        dia_chi_order: 1,
+        price_product: 1,
+        quantity: 1,
+        trang_thai: 1,
+        imageUrl: 1
+    }).exec((err, users) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: [],
+                messege: `Error is : ${err}`
+            });
+        } else {
+            response.json({
+                result: "ok",
+                data: users,
+                messege: "Query myaccount successfully"
+            });
+        }
+    });
+});
 module.exports = router;
