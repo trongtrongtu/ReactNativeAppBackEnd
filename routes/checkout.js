@@ -104,11 +104,11 @@ router.get('/list_order_users', (request, response) => {
     });
 });
 router.put('/modified_order', (request, response, next) => {
-    var _id = mongoose.Types.ObjectId(request.query.order_id);
+    var _id = mongoose.Types.ObjectId(request.body.order_id);
     var conditions = {};
     conditions._id = _id;
     let newValues = {
-        trang_thai: request.query.trang_thai
+        trang_thai: request.body.trang_thai
     };
     const options = {
         new: true,
