@@ -1,6 +1,7 @@
 var router = global.router;
 let Checkout = require('../models/CheckoutModel');
 let Product = require('../models/ProductModel');
+let mongoose = require('mongoose');
 
 router.post('/checkout_product', (request, response) => {
     let name = request.body.name_product;
@@ -101,5 +102,32 @@ router.get('/list_order_users', (request, response) => {
             });
         }
     });
+});
+router.put('/modified_order', (request, response, next) => {
+    var _id = mongoose.Types.ObjectId(request.query.order_id);
+    var conditions = {};
+    conditions._id = _id;
+    let newValues = {
+        trang_thai: request.query.trang_thai
+    };
+    const options = {
+        new: true,
+        multi: true
+    }
+    Checkout.findOneAndUpdate(conditions, { $set: newValues }, options, (err, updatedOrder) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: {},
+                messege: `Cannot update existing product.Error is : ${err}`
+            });
+        } else {
+            response.json({
+                result: "ok",
+                data: updatedOrder,
+                messege: "Update user successfully"
+            });
+        }
+    })
 });
 module.exports = router;
